@@ -4,6 +4,8 @@ const c = canvas.getContext('2d')
 canvas.width = innerWidth
 canvas.height = innerHeight
 
+const gravity = 1
+
 class Player {
     constructor() {
         this.position = {
@@ -12,7 +14,7 @@ class Player {
         }
         this.velocity = {
             x: 0,
-            y: 1
+            y: 0
         }
         this.width = 100
         this.height = 100
@@ -25,7 +27,8 @@ class Player {
 
     update() {
         this.draw()
-        this.position.y += 1
+        this.position.y += this.velocity.y
+        this.velocity.y += gravity
     }
 }
 
