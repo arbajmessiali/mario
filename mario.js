@@ -1,3 +1,5 @@
+import platform from './img/platform.png'
+
 const canvas = document.querySelector('canvas')
 const c = canvas.getContext('2d')
 
@@ -7,6 +9,9 @@ canvas.height = innerHeight
 const gravity = 1
 let pos = 0
 const finale = 5000
+
+const imag = new Image()
+imag.src = platform
 
 class Player {
     constructor() {
@@ -39,7 +44,7 @@ class Player {
 }
 
 class Platform {
-    constructor({x, y}) {
+    constructor({x, y, image}) {
         this.position = {
                 x,
                 y
@@ -47,17 +52,17 @@ class Platform {
 
         this.width = 200
         this.height = 20
+
+        this.image = image
     }
 
     draw() {
-        c.fillStyle = 'blue'
-        c.fillRect(this.position.x, this.position.y, this.width, this.height)
+        c.drawImage(this.image, this.position.x, this.position.y)    
     }
 }
 
-
 const player = new Player()
-const platforms = [new Platform({x:200, y:100}), new Platform({x:500, y:200})]
+const platforms = [new Platform({x:200, y:100, imag}), new Platform({x:500, y:200, imag})]
 
 const keys = {
     right : {
