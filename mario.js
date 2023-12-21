@@ -5,6 +5,8 @@ canvas.width = innerWidth
 canvas.height = innerHeight
 
 const gravity = 1
+let pos = 0
+const finale = 5000
 
 class Player {
     constructor() {
@@ -88,13 +90,18 @@ function animate() {
             platforms.forEach((platform) => {
                 platform.position.x -= 5
             })
+            pos += 5
         }
         else if (keys.left.pressed){
             platforms.forEach((platform) => {
                 platform.position.x += 5
             })
+            pos -= 5
         }
     }
+
+    if(pos >= finale)
+        console.log('win')
 
     platforms.forEach((platform) => {
     if(player.position.y + player.height <= platform.position.y && 
