@@ -4,6 +4,9 @@ const c = canvas.getContext('2d')
 canvas.width = 640
 canvas.height = 480
 
+const platform_image = new Image()
+platform_image.src = 'img/art.png'
+
 const gravity = 1
 let pos = 0
 const finale = 5000
@@ -50,8 +53,10 @@ class Platform {
     }
 
     draw() {
-        c.fillStyle = 'blue'
+        c.drawImage(platform_image, this.position.x, this.position.y, this.width, this.height)
+       /* c.fillStyle = 'blue'
         c.fillRect(this.position.x, this.position.y, this.width, this.height)
+        */
     }
 }
 
