@@ -57,7 +57,10 @@ class Platform {
 
 
 const player = new Player()
-const platforms = [new Platform({x:0, y:440, w:800, h:40}), new Platform({x:200, y:100, w:200, h:20}), new Platform({x:500, y:200, w:100, h:20})]
+const platforms = [new Platform({x:0, y:440, w:800, h:40}), 
+    new Platform({x:200, y:100, w:200, h:20}), 
+    new Platform({x:500, y:200, w:100, h:20}),
+    new Platform({x:900, y:250, w:100, h:30})]
 
 const keys = {
     right : {
@@ -76,8 +79,10 @@ function animate() {
     })
     player.update()
     
-    if(player.position.y > 360)
-        console.log('you lose')
+    if(player.position.y > 380)
+    {
+        console.log('You lose')
+    }
 
     if(keys.right.pressed && player.position.x < 400){
         player.velocity.x = 5
