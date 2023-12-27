@@ -9,6 +9,9 @@ const player_image = new Image()
 platform_image.src = 'img/art.png'
 player_image.src = 'img/hero-sheet.png'
 
+const backgroundImg = new Image()
+backgroundImg.src = 'img/background.jpg'
+
 const spriteWidth = 32
 const spriteHeight = 32
 
@@ -31,12 +34,12 @@ class Player {
             x: 0,
             y: 0
         }
-        this.width = 100
-        this.height = 100
+        this.width = 32
+        this.height = 32
     }
 
     draw() {
-        c.drawImage(player_image, frameX * spriteWidth, frameY * spriteHeight, spriteWidth, spriteHeight, this.position.x, this.position.y, this.width, this.height);
+        c.drawImage(player_image, frameX * spriteWidth, frameY * spriteHeight, spriteWidth, spriteHeight, this.position.x, this.position.y, this.width * 2, this.height * 2);
         if(gameFrame % frameHold == 0){
         if(frameX < 2) frameX++;
         else frameX = 0;
@@ -78,7 +81,7 @@ class Platform {
 
 
 const player = new Player()
-const platforms = [new Platform({x:0, y:440, w:800, h:40}), 
+const platforms = [new Platform({x:0, y:450, w:800, h:40}), 
     new Platform({x:200, y:100, w:200, h:20}), 
     new Platform({x:500, y:200, w:100, h:20}),
     new Platform({x:900, y:250, w:100, h:30})]
@@ -96,12 +99,13 @@ function animate() {
     requestAnimationFrame(animate)
     gameFrame++
     c.clearRect(0,0,canvas.width,canvas.height)
+    c.drawImage(backgroundImg, 0, 0, canvas.width, canvas.height + 100)
     platforms.forEach((platform) => {
         platform.draw()
     })
     player.update()
     
-    if(player.position.y > 380)
+    if(player.position.y > 450)
     {
         console.log('You lose')
     }
@@ -133,8 +137,8 @@ function animate() {
         console.log('win')
 
     platforms.forEach((platform) => {
-    if(player.position.y + player.height <= platform.position.y && 
-        player.position.y + player.height + player.velocity.y >= platform.position.y &&
+    if(player.position.y + player.height + 25 <= platform.position.y && 
+        player.position.y + player.height + 25 + player.velocity.y >= platform.position.y &&
         player.position.x + player.width >= platform.position.x &&
         player.position.x <= platform.position.x + platform.width){
         player.velocity.y = 0
