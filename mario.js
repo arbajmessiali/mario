@@ -6,8 +6,15 @@ canvas.height = 480
 
 const platform_image = new Image()
 const player_image = new Image()
-platform_image.src = 'img/art.png'
-player_image.src = 'img/hero-sheet.png'
+platform_src = 'img/art.png'
+player_src = 'img/hero-sheet.png'
+sprite_src = 'img/spritesheet.png'
+
+function createImg(imgSrc){
+    const image = new Image()
+    image.src = imgSrc
+    return image
+}
 
 const backgroundImg = new Image()
 backgroundImg.src = 'img/background.jpg'
@@ -39,7 +46,7 @@ class Player {
     }
 
     draw() {
-        c.drawImage(player_image, frameX * spriteWidth, frameY * spriteHeight, spriteWidth, spriteHeight, this.position.x, this.position.y, this.width * 2, this.height * 2);
+        c.drawImage(createImg(player_src), frameX * spriteWidth, frameY * spriteHeight, spriteWidth, spriteHeight, this.position.x, this.position.y, this.width * 2, this.height * 2);
         if(gameFrame % frameHold == 0){
         if(frameX < 2) frameX++;
         else frameX = 0;
@@ -72,19 +79,46 @@ class Platform {
     }
 
     draw() {
-        c.drawImage(platform_image, this.position.x, this.position.y, this.width, this.height)
+        c.drawImage(createImg(sprite_src), 0, 32, 48, 16, this.position.x, this.position.y, this.width, this.height, )
        /* c.fillStyle = 'blue'
         c.fillRect(this.position.x, this.position.y, this.width, this.height)
         */
     }
 }
 
+class GenericObject {
+    constructor({x, y, image}) {
+        this.position = {
+                x,
+                y
+        }
+
+        this.image = image
+        this.width = image.width
+        this.height = image.height
+    }
+
+    draw() {
+        c.drawImage(this.image, this.position.x, this.position.y)
+       /* c.fillStyle = 'blue'
+        c.fillRect(this.position.x, this.position.y, this.width, this.height)
+        */
+    }
+}
 
 const player = new Player()
 const platforms = [new Platform({x:0, y:450, w:800, h:40}), 
     new Platform({x:200, y:100, w:200, h:20}), 
     new Platform({x:500, y:200, w:100, h:20}),
     new Platform({x:900, y:250, w:100, h:30})]
+
+const genericObjects = [
+    new GenericObject({
+        x: 0,
+        y:0,
+        image: backgroundImg
+    })
+]
 
 const keys = {
     right : {
