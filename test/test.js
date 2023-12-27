@@ -9,51 +9,12 @@ imag.src = '../img/hero-sheet.png';
 const spriteWidth = 32
 const spriteHeight = 32
 
+let frameS = 0
+let frameL = 3
+let frameR = 1
 let frameX = 0
-let frameY = 1
 let gameFrame = 0
 let frameHold = 7
-
-class Player {
-    constructor() {
-        this.position = {
-            x: 100,
-            y: 250
-        }
-        this.velocity = {
-            x: 0,
-            y: 0
-        }
-        this.width = 32
-        this.height = 32
-    }
-
-    draw() {
-        if(anim.right.pressed)
-            ctx.drawImage(createImg(player_src), frameX * spriteWidth, frameY * spriteHeight, spriteWidth, spriteHeight, this.position.x, this.position.y, this.width * 2, this.height * 2);
-        else if(anim.left.pressed)
-            ctx.drawImage(createImg(player_src), frameX * spriteWidth, frameY * spriteHeight, spriteWidth, spriteHeight, this.position.x, this.position.y, this.width * 2, this.height * 2);
-        if(gameFrame % frameHold == 0){
-        if(frameX < 2) frameX++;
-        else frameX = 0;
-    }
-        /* c.fillStyle = 'red'
-        c.fillRect(this.position.x, this.position.y, this.width, this.height)
-    */
-    }
-
-    update() {
-        this.draw()
-        this.position.y += this.velocity.y
-        this.position.x += this.velocity.x
-        if(this.position.y + this.height + this.velocity.y <= canvas.height)
-            this.velocity.y += gravity
-        else
-            this.velocity.y = 0
-    }
-}
-
-const player = new Player()
 
 const keys = {
     right : {
@@ -73,40 +34,62 @@ const anim = {
     }
 }
 
-function animate(){
-    ctx.clearRect(0,0,640,480);
-    ctx.drawImage(imag, frameX * spriteWidth, frameY * spriteHeight, spriteWidth, spriteHeight, 0, 0, canvas.width, canvas.height);
-    if(gameFrame % frameHold == 0){
-    if(frameX < 2) frameX++;
-    else frameX = 0;
+class Player {
+    constructor() {
+        this.position = {
+            x: 100,
+            y: 250
+        }
+        this.velocity = {
+            x: 0,
+            y: 0
+        }
+        this.width = 32
+        this.height = 32
     }
-    gameFrame++
-    requestAnimationFrame(animate);
 
-    if(keys.right.pressed && player.position.x < 400){
-        player.velocity.x = 5
+    draw() {
+        if(anim.right.pressed){
+            ctx.drawImage(imag, frameX * spriteWidth, frameR * spriteHeight, spriteWidth, spriteHeight, 0, 0, canvas.width, canvas.height);
+            console.log('right draw')
+        }
+        else if(anim.left.pressed){
+            ctx.drawImage(imag, frameX * spriteWidth, frameL * spriteHeight, spriteWidth, spriteHeight, 0, 0, canvas.width, canvas.height);
+            console.log('left draw')
+        }
+        else
+            ctx.drawImage(imag, frameX * spriteWidth, frameS * spriteHeight, spriteWidth, spriteHeight, 0, 0, canvas.width, canvas.height);
+        
+        //ctx.drawImage(imag, frameX * spriteWidth, frameY * spriteHeight, spriteWidth, spriteHeight, 0, 0, canvas.width, canvas.height);
+        if(gameFrame % frameHold == 0){
+        if(frameX < 2) frameX++;
+        else frameX = 0;
     }
-    else if(keys.left.pressed && player.position.x > 100){
-        player.velocity.x = -5
+        /* c.fillStyle = 'red'
+        c.fillRect(this.position.x, this.position.y, this.width, this.height)
+    */
     }
-    else {
-        player.velocity.x = 0
-    }
-};
 
-animate();
+    update() {
+        this.draw()
+    }
+}
+
+const player = new Player()
 
 addEventListener('keydown', ({keyCode}) => {
     switch(keyCode){
         case 65:
             keys.left.pressed = true
             anim.left.pressed = true
+            console.log('left')
             break;
         case 83:
             break;
         case 68:
             keys.right.pressed = true
             anim.right.pressed = true
+            console.log('right')
             break;
         case 87:
             player.velocity.y -= 20
@@ -131,3 +114,24 @@ addEventListener('keyup', ({keyCode}) => {
             break;
     }
 })
+
+function animate(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    player.draw()
+    gameFrame++
+    requestAnimationFrame(animate);
+    
+
+    if(keys.right.pressed && player.position.x < 400){
+        player.velocity.x = 5
+    }
+    else if(keys.left.pressed && player.position.x > 100){
+        player.velocity.x = -5
+    }
+    else {
+        player.velocity.x = 0
+    }
+};
+
+animate();
+
