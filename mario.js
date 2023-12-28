@@ -71,8 +71,6 @@ class Player {
         this.position.x += this.velocity.x
         if(this.position.y + this.height + this.velocity.y <= canvas.height)
             this.velocity.y += gravity
-        else
-            this.velocity.y = 0
     }
 }
 
@@ -119,7 +117,8 @@ const player = new Player()
 const platforms = [new Platform({x:0, y:450, w:800, h:40}), 
     new Platform({x:200, y:100, w:200, h:20}), 
     new Platform({x:500, y:200, w:100, h:20}),
-    new Platform({x:900, y:250, w:100, h:30})]
+    new Platform({x:900, y:250, w:100, h:30}),
+    new Platform({x:1000, y:450, w:800, h:40})]   
 
 const genericObjects = [
     new GenericObject({
