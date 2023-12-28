@@ -23,7 +23,9 @@ const spriteWidth = 32
 const spriteHeight = 32
 
 let frameX = 0
-let frameY = 1
+let frameR = 1
+let frameL = 3
+let frameS = 0
 let gameFrame = 0
 let frameHold = 7
 
@@ -41,12 +43,19 @@ class Player {
             x: 0,
             y: 0
         }
-        this.width = 32
-        this.height = 32
+        this.width = 96
+        this.height = 96
     }
 
     draw() {
-        c.drawImage(createImg(player_src), frameX * spriteWidth, frameY * spriteHeight, spriteWidth, spriteHeight, this.position.x, this.position.y, this.width * 2, this.height * 2);
+        if(anim.right.pressed){
+            c.drawImage(createImg(player_src), frameX * spriteWidth, frameR * spriteHeight, spriteWidth, spriteHeight, this.position.x, this.position.y, this.width, this.height);
+        }
+        else if(anim.left.pressed){
+            c.drawImage(createImg(player_src), frameX * spriteWidth, frameL * spriteHeight, spriteWidth, spriteHeight, this.position.x, this.position.y, this.width, this.height);
+        }
+        else
+            c.drawImage(createImg(player_src), frameX * spriteWidth, frameS * spriteHeight, spriteWidth, spriteHeight, this.position.x, this.position.y, this.width, this.height);
         if(gameFrame % frameHold == 0){
         if(frameX < 2) frameX++;
         else frameX = 0;
@@ -129,6 +138,15 @@ const keys = {
     }
 }
 
+const anim = {
+    right : {
+        pressed: false
+    },
+    left : {
+        pressed: false
+    }
+}
+
 function animate() {
     requestAnimationFrame(animate)
     gameFrame++
@@ -171,8 +189,8 @@ function animate() {
         console.log('win')
 
     platforms.forEach((platform) => {
-    if(player.position.y + player.height + 25 <= platform.position.y && 
-        player.position.y + player.height + 25 + player.velocity.y >= platform.position.y &&
+    if(player.position.y + player.height <= platform.position.y && 
+        player.position.y + player.height + player.velocity.y >= platform.position.y &&
         player.position.x + player.width >= platform.position.x &&
         player.position.x <= platform.position.x + platform.width){
         player.velocity.y = 0
@@ -186,11 +204,13 @@ addEventListener('keydown', ({keyCode}) => {
     switch(keyCode){
         case 65:
             keys.left.pressed = true
+            anim.left.pressed = true
             break;
         case 83:
             break;
         case 68:
             keys.right.pressed = true
+            anim.right.pressed = true
             break;
         case 87:
             player.velocity.y -= 20
@@ -202,11 +222,13 @@ addEventListener('keyup', ({keyCode}) => {
     switch(keyCode){
         case 65:
             keys.left.pressed = false
+            anim.left.pressed = false
             break;
         case 83:
             break;
         case 68:
             keys.right.pressed = false
+            anim.right.pressed = false
             break;
         case 87:
             player.velocity.y = 0
