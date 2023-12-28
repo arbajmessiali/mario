@@ -86,7 +86,7 @@ class Platform {
     }
 
     draw() {
-        c.drawImage(createImg(sprite_src), 0, 32, 48, 16, this.position.x, this.position.y, this.width, this.height)
+        c.drawImage(createImg(sprite_src), 2, 32, 46, 16, this.position.x, this.position.y, this.width, this.height)
        /* c.fillStyle = 'blue'
         c.fillRect(this.position.x, this.position.y, this.width, this.height)
         */
@@ -115,9 +115,9 @@ class GenericObject {
 
 let player = new Player()
 let platforms = [new Platform({x:0, y:450, w:800, h:40}), 
-    new Platform({x:200, y:100, w:200, h:20}), 
-    new Platform({x:500, y:200, w:100, h:20}),
-    new Platform({x:900, y:250, w:100, h:30}),
+    new Platform({x:200, y:100, w:200, h:32}), 
+    new Platform({x:500, y:200, w:100, h:32}),
+    new Platform({x:900, y:250, w:100, h:32}),
     new Platform({x:1000, y:450, w:800, h:40})]   
 
 let genericObjects = [
@@ -132,9 +132,9 @@ let genericObjects = [
 function init(){
     player = new Player()
     platforms = [new Platform({x:0, y:450, w:800, h:40}), 
-        new Platform({x:200, y:100, w:200, h:20}), 
-        new Platform({x:500, y:200, w:100, h:20}),
-        new Platform({x:900, y:250, w:100, h:30}),
+        new Platform({x:200, y:100, w:200, h:32}), 
+        new Platform({x:500, y:200, w:100, h:32}),
+        new Platform({x:900, y:250, w:100, h:32}),
         new Platform({x:1000, y:450, w:800, h:40})]   
 
     genericObjects = [
@@ -206,10 +206,10 @@ function animate() {
         console.log('win')
 
     platforms.forEach((platform) => {
-    if(player.position.y + player.height <= platform.position.y && 
-        player.position.y + player.height + player.velocity.y >= platform.position.y &&
-        player.position.x + player.width >= platform.position.x &&
-        player.position.x <= platform.position.x + platform.width){
+    if(player.position.y + player.height <= platform.position.y + 5 && 
+        player.position.y + player.height + player.velocity.y >= platform.position.y + 5 &&
+        player.position.x + player.width >= platform.position.x + 30  &&
+        player.position.x <= platform.position.x + platform.width - 30){
         player.velocity.y = 0
     }
   })
