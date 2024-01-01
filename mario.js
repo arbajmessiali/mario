@@ -1,16 +1,22 @@
-document.onreadystatechange = function () {
-    if (document.readyState !== "complete") {
+function loading(){
+    show = function(){
         document.querySelector(
-            "canvas").style.visibility = "hidden";
+            "#loader").style.display = "block";
         document.querySelector(
-            "#loader").style.visibility = "visible";
-    } else {
+            "canvas").style.visibility = "hidden";  
+        setTimeout(hide, 3000); // 3 seconds
+      },
+
+      hide = function(){
         document.querySelector(
             "#loader").style.display = "none";
         document.querySelector(
             "canvas").style.visibility = "visible";
-    }
+      };
+    show();
 };
+
+loading();
 
 const canvas = document.querySelector('canvas')
 const c = canvas.getContext('2d')
