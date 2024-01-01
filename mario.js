@@ -1,3 +1,17 @@
+document.onreadystatechange = function () {
+    if (document.readyState !== "complete") {
+        document.querySelector(
+            "canvas").style.visibility = "hidden";
+        document.querySelector(
+            "#loader").style.visibility = "visible";
+    } else {
+        document.querySelector(
+            "#loader").style.display = "none";
+        document.querySelector(
+            "canvas").style.visibility = "visible";
+    }
+};
+
 const canvas = document.querySelector('canvas')
 const c = canvas.getContext('2d')
 
