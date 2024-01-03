@@ -227,8 +227,8 @@ function checkStart(){
         startScreen()
     if(keys.select.pressed && keys.space.pressed){
         startGame = true
-        init()
         keys.space.pressed = false
+        init()
     }
 }
 
