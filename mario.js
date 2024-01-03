@@ -134,6 +134,38 @@ class GenericObject {
     }
 }
 
+class StartScreen {
+    constructor({x, y, w, h}) {
+        this.position = {
+                x,
+                y
+        }
+
+        this.width = w
+        this.height = h
+    }
+
+    draw() {
+        c.drawImage(createImg(load_src), 96, 32, 48, 16, this.position.x, this.position.y, this.width, this.height)
+        c.drawImage(createImg(load_src), 288, 32, 48, 16, this.position.x, this.position.y + 30, this.width, this.height)
+       /* c.fillStyle = 'blue'
+        c.fillRect(this.position.x, this.position.y, this.width, this.height)
+        */
+    }
+}
+
+let start
+let startGame = false
+
+function startScreen(){
+    start = new StartScreen({x:100, y:100, w:100, h:32})
+    start.draw()
+    if(keys.select.pressed)
+        c.fillRect(85,100,10,32)
+    else
+        c.fillRect(85,130,10,32)
+}
+
 let player = new Player()
 let platforms = [new Platform({x:0, y:450, w:800, h:40}), 
     new Platform({x:200, y:100, w:200, h:32}), 
@@ -173,10 +205,10 @@ const keys = {
     left : {
         pressed: false
     },
-    up : {
-        pressed: false
+    select : {
+        pressed: true
     },
-    down : {
+    space : {
         pressed: false
     }
 }
@@ -190,58 +222,77 @@ const anim = {
     }
 }
 
+function checkStart(){
+    if(!startGame)
+        startScreen()
+    if(keys.select.pressed && keys.space.pressed){
+        startGame = true
+        init()
+        keys.space.pressed = false
+    }
+}
+
+function wholeGame(){
+    platforms.forEach((platform) => {
+        platform.draw()
+    })
+
+player.update()    
+
+if(player.position.y > 450)
+{
+    console.log('You lose')
+}
+
+if(keys.right.pressed && player.position.x < 400){
+    player.velocity.x = 5
+}
+else if(keys.left.pressed && player.position.x > 100){
+    player.velocity.x = -5
+}
+else {
+    player.velocity.x = 0
+
+    if (keys.right.pressed){
+        platforms.forEach((platform) => {
+            platform.position.x -= 5
+        })
+        pos += 5
+    }
+    else if (keys.left.pressed){
+        platforms.forEach((platform) => {
+            platform.position.x += 5
+        })
+        pos -= 5
+    }
+}
+
+if(pos >= finale)
+    console.log('win')
+
+platforms.forEach((platform) => {
+if(player.position.y + player.height <= platform.position.y + 5 && 
+    player.position.y + player.height + player.velocity.y >= platform.position.y + 5 &&
+    player.position.x + player.width >= platform.position.x + 30  &&
+    player.position.x <= platform.position.x + platform.width - 30){
+    player.velocity.y = 0
+}
+})
+
+if(player.position.y > canvas.height){
+    startGame = false
+    init()
+}
+}
+
 function animate() {
     requestAnimationFrame(animate)
     gameFrame++
     c.clearRect(0,0,canvas.width,canvas.height)
     c.drawImage(backgroundImg, 0, 0, canvas.width, canvas.height + 100)
-    platforms.forEach((platform) => {
-        platform.draw()
-    })
-    player.update()
-    
-    if(player.position.y > 450)
-    {
-        console.log('You lose')
-    }
-
-    if(keys.right.pressed && player.position.x < 400){
-        player.velocity.x = 5
-    }
-    else if(keys.left.pressed && player.position.x > 100){
-        player.velocity.x = -5
-    }
-    else {
-        player.velocity.x = 0
-
-        if (keys.right.pressed){
-            platforms.forEach((platform) => {
-                platform.position.x -= 5
-            })
-            pos += 5
-        }
-        else if (keys.left.pressed){
-            platforms.forEach((platform) => {
-                platform.position.x += 5
-            })
-            pos -= 5
-        }
-    }
-
-    if(pos >= finale)
-        console.log('win')
-
-    platforms.forEach((platform) => {
-    if(player.position.y + player.height <= platform.position.y + 5 && 
-        player.position.y + player.height + player.velocity.y >= platform.position.y + 5 &&
-        player.position.x + player.width >= platform.position.x + 30  &&
-        player.position.x <= platform.position.x + platform.width - 30){
-        player.velocity.y = 0
-    }
-  })
-
-    if(player.position.y > canvas.height)
-        init()
+    checkStart()
+    if(startGame)
+        wholeGame()
 }
 
 animate()
@@ -253,6 +304,10 @@ addEventListener('keydown', ({keyCode}) => {
             anim.left.pressed = true
             break;
         case 83:
+            if(keys.select.pressed)
+                keys.select.pressed = false
+            else
+                keys.select.pressed = true
             break;
         case 68:
             keys.right.pressed = true
@@ -260,7 +315,10 @@ addEventListener('keydown', ({keyCode}) => {
             break;
         case 87:
             player.velocity.y -= 20
-            keys.up.pressed = true
+            if(keys.select.pressed)
+                keys.select.pressed = false
+            else
+                keys.select.pressed = true
             break;
     }
 })
@@ -272,6 +330,7 @@ addEventListener('keyup', ({keyCode}) => {
             anim.left.pressed = false
             break;
         case 83:
+            console.log('pressed')
             break;
         case 68:
             keys.right.pressed = false
@@ -279,7 +338,14 @@ addEventListener('keyup', ({keyCode}) => {
             break;
         case 87:
             player.velocity.y = 0
-            keys.up.pressed = false
+            break;
+    }
+})
+
+addEventListener('keypress', ({keyCode}) => {
+    switch(keyCode){
+        case 32:
+                keys.space.pressed = true
             break;
     }
 })
