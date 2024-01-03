@@ -149,35 +149,6 @@ let genericObjects = [
     })
 ]
 
-class StartScreen {
-    constructor({x, y, w, h}) {
-        this.position = {
-                x,
-                y
-        }
-
-        this.width = w
-        this.height = h
-    }
-
-    draw() {
-        c.drawImage(createImg(load_src), 96, 32, 48, 16, this.position.x, this.position.y, this.width, this.height)
-        c.drawImage(createImg(load_src), 288, 32, 48, 16, this.position.x, this.position.y + 30, this.width, this.height)
-       /* c.fillStyle = 'blue'
-        c.fillRect(this.position.x, this.position.y, this.width, this.height)
-        */
-    }
-}
-
-let start
-
-function startScreen(){
-    start = new StartScreen({x:200, y:200, w:100, h:32})
-    start.draw()
-    if(keys.up.pressed)
-        c.fillRect(190,200,10,32)
-}
-
 function init(){
     player = new Player()
     platforms = [new Platform({x:0, y:450, w:800, h:40}), 
@@ -224,7 +195,6 @@ function animate() {
     gameFrame++
     c.clearRect(0,0,canvas.width,canvas.height)
     c.drawImage(backgroundImg, 0, 0, canvas.width, canvas.height + 100)
-    startScreen()
     platforms.forEach((platform) => {
         platform.draw()
     })

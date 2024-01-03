@@ -30,6 +30,35 @@ let frameX = 0
 let gameFrame = 0
 let frameHold = 7
 
+class StartScreen {
+    constructor({x, y, w, h}) {
+        this.position = {
+                x,
+                y
+        }
+
+        this.width = w
+        this.height = h
+    }
+
+    draw() {
+        c.drawImage(createImg(load_src), 96, 32, 48, 16, this.position.x, this.position.y, this.width, this.height)
+        c.drawImage(createImg(load_src), 288, 32, 48, 16, this.position.x, this.position.y + 30, this.width, this.height)
+       /* c.fillStyle = 'blue'
+        c.fillRect(this.position.x, this.position.y, this.width, this.height)
+        */
+    }
+}
+
+let start
+
+function startScreen(){
+    start = new StartScreen({x:200, y:200, w:100, h:32})
+    start.draw()
+    if(keys.up.pressed)
+        c.fillRect(190,200,10,32)
+}
+
 const keys = {
     right : {
         pressed: false
@@ -134,7 +163,7 @@ function animate(){
     player.draw()
     gameFrame++
     requestAnimationFrame(animate);
-    
+    startScreen()
 
     if(keys.right.pressed && player.position.x < 400){
         player.velocity.x = 5
