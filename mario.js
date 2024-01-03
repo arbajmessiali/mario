@@ -345,7 +345,8 @@ addEventListener('keyup', ({keyCode}) => {
 addEventListener('keypress', ({keyCode}) => {
     switch(keyCode){
         case 32:
-                keys.space.pressed = true
+                if(keys.select.pressed)
+                    keys.space.pressed = true
             break;
     }
 })
